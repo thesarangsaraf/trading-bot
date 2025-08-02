@@ -1,0 +1,33 @@
+Input:
+    candles: List of Candle objects (each with open, high, low, close)
+    windowSize: Integer (number of candles to evaluate, e.g., 10)
+    thresholdPercent: Float (e.g., 2.0 for 2%)
+
+Function isConsolidating(candles, windowSize, thresholdPercent):
+
+    // Check if we have at least 'windowSize' number of candles
+    If candles.size < windowSize:
+        Return false  // Not enough data to evaluate consolidation
+
+    // Take the last 'windowSize' candles from the list
+    recentCandles = candles[-windowSize:]  // Get recent N candles for checking
+
+    // Find the highest price among all the highs in recent candles
+    highestHigh = max(candle.high for candle in recentCandles)
+
+    // Find the lowest price among all the lows in recent candles
+    lowestLow = min(candle.low for candle in recentCandles)
+
+    // Calculate the price range covered by recent candles
+    range = highestHigh - lowestLow
+
+    // Calculate how big this range is, in percentage terms, relative to the lowest low
+    rangePercent = (range / lowestLow) * 100
+
+    // If the percentage range is smaller than or equal to the threshold, it’s a consolidation
+    If rangePercent <= thresholdPercent:
+        Return true  // Price is moving in a tight range, so it's consolidating
+    Else:
+        Return false  // Price is too volatile, not a consolidation zone
+
+End Function
