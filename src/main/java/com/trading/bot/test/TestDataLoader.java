@@ -1,5 +1,6 @@
 package com.trading.bot.test;
 
+import com.trading.bot.test.util.CsvToJsonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

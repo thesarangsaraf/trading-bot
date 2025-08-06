@@ -1,9 +1,9 @@
-package com.trading.bot.test;
+package com.trading.bot.test.util;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import com.trading.bot.dto.StockTestDataDTO;
+import com.trading.bot.dto.PriceOhlcDTOTest;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -13,16 +13,16 @@ import java.util.List;
 @Service
 public class CsvToJsonMapper {
 
-    public List<StockTestDataDTO> map(File csvFile) {
+    public List<PriceOhlcDTOTest> map(File csvFile) {
         CsvMapper csvMapper = new CsvMapper();
         CsvSchema schema = CsvSchema.emptySchema()
                 .withHeader()
                 .withColumnSeparator(',')
                 .withQuoteChar('"');
 
-        List<StockTestDataDTO> stockDataList = null;
+        List<PriceOhlcDTOTest> stockDataList = null;
         try {
-            MappingIterator<StockTestDataDTO> iterator = csvMapper.readerFor(StockTestDataDTO.class)
+            MappingIterator<PriceOhlcDTOTest> iterator = csvMapper.readerFor(PriceOhlcDTOTest.class)
                     .with(schema)
                     .readValues(csvFile);
 

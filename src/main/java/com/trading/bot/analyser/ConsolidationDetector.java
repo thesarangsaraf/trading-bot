@@ -1,6 +1,6 @@
 package com.trading.bot.analyser;
 
-import com.trading.bot.dto.CandleDTO;
+import com.trading.bot.dto.PriceOhlcDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -8,8 +8,8 @@ import java.util.*;
 @Service
 public class ConsolidationDetector {
 
-    public static List<List<CandleDTO>> detectConsolidation(List<CandleDTO> candles, int minCandles, double maxRangePercent) {
-        List<List<CandleDTO>> consolidations = new ArrayList<>();
+    public List<List<PriceOhlcDTO>> detectConsolidation(List<PriceOhlcDTO> candles, int minCandles, double maxRangePercent) {
+        List<List<PriceOhlcDTO>> consolidations = new ArrayList<>();
         int n = candles.size();
         int i = 0;
 
@@ -32,7 +32,7 @@ public class ConsolidationDetector {
 
             int duration = j - i;
             if (duration >= minCandles) {
-                List<CandleDTO> block = candles.subList(i, j);
+                List<PriceOhlcDTO> block = candles.subList(i, j);
                 consolidations.add(new ArrayList<>(block));
                 i = j;  // skip to end of consolidation
             } else {

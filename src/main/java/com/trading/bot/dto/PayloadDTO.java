@@ -4,14 +4,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class PayloadDTO {
-    private List<CandleDTO> candles;
+    private List<PriceOhlcDTO> candles;
     private LocalDateTime start_time;
     private LocalDateTime end_time;
     private int interval_in_minutes;
 
     // Getters and Setters
-    public List<CandleDTO> getCandles() { return candles; }
-    public void setCandles(List<CandleDTO> candles) { this.candles = candles; }
+    public List<PriceOhlcDTO> getCandles() { return candles; }
+    public void setCandles(List<PriceOhlcDTO> candles) { this.candles = candles; }
 
     public LocalDateTime getStart_time() { return start_time; }
     public void setStart_time(LocalDateTime start_time) { this.start_time = start_time; }

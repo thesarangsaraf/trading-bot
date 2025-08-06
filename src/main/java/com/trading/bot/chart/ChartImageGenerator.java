@@ -1,7 +1,7 @@
 package com.trading.bot.chart;
 
-import com.trading.bot.dto.StockTestDataDTO;
-import com.trading.bot.test.CsvToJsonMapper;
+import com.trading.bot.dto.PriceOhlcDTOTest;
+import com.trading.bot.test.util.CsvToJsonMapper;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtils;
 import org.jfree.chart.JFreeChart;
@@ -10,10 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 @Service
 public class ChartImageGenerator {
@@ -22,12 +20,12 @@ public class ChartImageGenerator {
     private CsvToJsonMapper csvToJsonMapper;
 
     public void generate(){
-        File folder = new File("/Users/thesarangsaraf/git/trading-bot/src/main/resources/files");
+        File folder = new File("/Users/thesarangsaraf/git/trading-bot/src/main/resources/test-data");
         File[] files = folder.listFiles();
 
         for (File f: files) {
             try {
-                List<StockTestDataDTO> historicData = csvToJsonMapper.map(f);
+                List<PriceOhlcDTOTest> historicData = csvToJsonMapper.map(f);
 
                 this.generate(f.getName(), historicData);
 
@@ -37,24 +35,16 @@ public class ChartImageGenerator {
         }
     }
 
-    public void generate(String stockName, List<StockTestDataDTO> historicData) throws Exception {
-        historicData = historicData.subList(0, 10);
+    public void generate(String stockName, List<PriceOhlcDTOTest> historicData) throws Exception {
+        historicData = historicData.subList(100, 300);
 
-        List<String> dateStrs = historicData.stream().map(StockTestDataDTO::getDate).toList();
+        Date[] dates = historicData.stream().map(PriceOhlcDTOTest::getDate).toArray(Date[]::new);
 
-        double[] open = historicData.stream().map(StockTestDataDTO::getOpen).mapToDouble(Double::doubleValue).toArray();
-        double[] high = historicData.stream().map(StockTestDataDTO::getHigh).mapToDouble(Double::doubleValue).toArray();
-        double[] low = historicData.stream().map(StockTestDataDTO::getLow).mapToDouble(Double::doubleValue).toArray();
-        double[] close = historicData.stream().map(StockTestDataDTO::getPrice).mapToDouble(Double::doubleValue).toArray();
-        double[] volume = historicData.stream().map(StockTestDataDTO::getVolume).mapToDouble(Double::doubleValue).toArray();
-
-        // Convert date strings to java.util.Date[]
-        Date[] dates = new Date[dateStrs.size()];
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        for (int i = 0; i < dateStrs.size(); i++) {
-            dates[i] = sdf.parse(dateStrs.get(i));
-        }
+        double[] open = historicData.stream().map(PriceOhlcDTOTest::getOpen).mapToDouble(Double::doubleValue).toArray();
+        double[] high = historicData.stream().map(PriceOhlcDTOTest::getHigh).mapToDouble(Double::doubleValue).toArray();
+        double[] low = historicData.stream().map(PriceOhlcDTOTest::getLow).mapToDouble(Double::doubleValue).toArray();
+        double[] close = historicData.stream().map(PriceOhlcDTOTest::getPrice).mapToDouble(Double::doubleValue).toArray();
+        double[] volume = historicData.stream().map(PriceOhlcDTOTest::getVolume).mapToDouble(Double::doubleValue).toArray();
 
         // Create dataset
         DefaultHighLowDataset dataset = new DefaultHighLowDataset(
@@ -69,8 +59,8 @@ public class ChartImageGenerator {
         );
 
         // Save chart to PNG
-        File outputFile = new File(stockName + "candlestick_chart.png");
-        ChartUtils.saveChartAsPNG(outputFile, chart, 800, 600);
+        File outputFile = new File(stockName + ".png");
+        ChartUtils.saveChartAsPNG(outputFile, chart, 1920, 1080);
         System.out.println("Chart saved to " + outputFile.getAbsolutePath());
 
     }
