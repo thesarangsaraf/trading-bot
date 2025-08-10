@@ -8,8 +8,15 @@ import java.util.*;
 @Service
 public class ConsolidationDetector {
 
-    public List<List<PriceOhlcDTO>> detectConsolidation(List<PriceOhlcDTO> candles, int minCandles, double maxRangePercent) {
-        List<List<PriceOhlcDTO>> consolidations = new ArrayList<>();
+    private int minConsolidationCondles = 4;
+    private double maxConsolidationRangePercentage = 2.0;
+
+    public List<List<Integer>> detect(List<PriceOhlcDTO> candles){
+        return detect(candles, minConsolidationCondles, maxConsolidationRangePercentage);
+    }
+
+    public List<List<Integer>> detect(List<PriceOhlcDTO> candles, int minCandles, double maxRangePercent) {
+        List<List<Integer>> consolidations = new ArrayList<>();
         int n = candles.size();
         int i = 0;
 
@@ -32,8 +39,7 @@ public class ConsolidationDetector {
 
             int duration = j - i;
             if (duration >= minCandles) {
-                List<PriceOhlcDTO> block = candles.subList(i, j);
-                consolidations.add(new ArrayList<>(block));
+                consolidations.add(List.of(i, j));
                 i = j;  // skip to end of consolidation
             } else {
                 i++;  // move window forward

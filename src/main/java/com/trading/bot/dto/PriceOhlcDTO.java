@@ -17,6 +17,10 @@ public class PriceOhlcDTO {
     private double close;
     private long volume;
 
+    public Date getDate() {
+        return new Date(timestamp);
+    }
+
     @Override
     public String toString() {
         return "PriceOhlcDTO{" +

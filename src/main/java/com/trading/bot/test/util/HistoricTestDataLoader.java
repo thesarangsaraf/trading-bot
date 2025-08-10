@@ -1,7 +1,6 @@
-package com.trading.bot.test;
+package com.trading.bot.test.util;
 
-import com.trading.bot.dto.PriceOhlcDTOTest;
-import com.trading.bot.test.util.CsvToJsonMapper;
+import com.trading.bot.dto.PriceOhlcDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,15 +16,15 @@ public class HistoricTestDataLoader {
     @Autowired
     private CsvToJsonMapper csvToJsonMapper;
 
-    public HashMap<String, List<PriceOhlcDTOTest>> loadData() {
+    public HashMap<String, List<PriceOhlcDTO>> loadData() {
         File folder = new File(historicDataPath);
         File[] files = folder.listFiles();
 
-        HashMap<String, List<PriceOhlcDTOTest>> map = new HashMap<>();
+        HashMap<String, List<PriceOhlcDTO>> map = new HashMap<>();
 
         for (File f : files) {
             try {
-                List<PriceOhlcDTOTest> historicData = csvToJsonMapper.map(f);
+                List<PriceOhlcDTO> historicData = csvToJsonMapper.map(f);
                 map.put(f.getName().substring(0, f.getName().indexOf(" ")), historicData);
             } catch (Exception e) {
                 e.printStackTrace();
